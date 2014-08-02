@@ -52,3 +52,12 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+#idea project files
+.idea
+
+#static files
+*bower_components/
+files/
+
+#local settings for deployment
+webclipart/local_settings.py
