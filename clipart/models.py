@@ -14,9 +14,9 @@ class Category(models.Model):
         verbose_name_plural = u'Категории'
 
 
-class Picture(models.Model):
+class Image(models.Model):
     name = models.CharField(max_length=50, verbose_name=u'название')
-    src = models.FileField(upload_to='pictures', verbose_name=u'путь')
+    src = models.FileField(upload_to='images', verbose_name=u'путь')
     categories = models.ManyToManyField(Category)
 
     def __unicode__(self):

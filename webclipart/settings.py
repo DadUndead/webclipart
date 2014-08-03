@@ -90,10 +90,6 @@ STATICFILES_DIRS = (
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR,  'templates'),
-)
-
 
 #import from local settings deployment config
 

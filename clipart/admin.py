@@ -1,14 +1,14 @@
 from django.contrib import admin
-from models import Category, Picture
+from models import Category, Image
 
 
 admin.site.register(Category)
 
 
-class PictureAdmin(admin.ModelAdmin):
+class ImageAdmin(admin.ModelAdmin):
     list_display = ('name', 'image_thumb')
     list_filter = ['categories']
     filter_horizontal = ['categories']
 
 
-admin.site.register(Picture, PictureAdmin)
+admin.site.register(Image, ImageAdmin)

@@ -61,3 +61,6 @@ files/
 
 #local settings for deployment
 webclipart/local_settings.py
+
+#local db
+*.sqlite3
