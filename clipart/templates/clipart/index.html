@@ -13,6 +13,7 @@
 
     <!-- Bootstrap -->
     <link href="{% static 'clipart/bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'clipart/bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css' %}" rel="stylesheet">
     <link href="{% static 'clipart/css/style.css' %}" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -69,10 +70,16 @@
             </li>
           </ul>
         </div>
-        <div class="images">
+        <div class="images" ng-init="sliderModel=100">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="slider" ng-slider min="50" max="300" ng-model="sliderModel"></div>
+              <p>{{ sliderModel + 'px' }}</p>
+            </div>
+          </div>
           <ul>
             <li ng-repeat="image in images">
-              <img ng-src="{{ image.src }}">
+              <img ng-src="{{ image.src }}" ng-style="{width: sliderModel + 'px', height: sliderModel + 'px'}">
             </li>
           </ul>
         </div>
@@ -83,6 +90,7 @@
     {% endverbatim %}
 
     <script src="{% static 'clipart/bower_components/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'clipart/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
     <script src="{% static 'clipart/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'clipart/bower_components/angular/angular.min.js' %}"></script>
     <script src="{% static 'clipart/js/app.js' %}"></script>

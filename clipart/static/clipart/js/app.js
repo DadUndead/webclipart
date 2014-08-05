@@ -32,4 +32,30 @@ angular.module('clipart', [])
         $scope.images = [];
       }
     }
-  }]);
+  }])
+
+  .directive('ngSlider', function() {
+    return {
+      restrict: 'A',
+      require : 'ngModel',
+      link: function(scope, element, attrs, ngModel) {
+        element.slider({
+            min: parseFloat(attrs.min) || 0,
+            max: parseFloat(attrs.max) || 10,
+            slide: function(event, ui) {
+              scope.$apply(function() {
+                ngModel.$setViewValue(ui.value);
+              });
+            }
+          });
+
+        scope.$watch(attrs.ngModel, function(value) {
+          element.slider('value', value)
+        });
+
+        ngModel.$render = function() {
+          element.slider('value', ngModel.$viewValue)
+        };
+      }
+    }
+  });
