@@ -4,7 +4,7 @@ html,body{height:100%;width: 100%}
     position: relative; height: 100%; width: 100%; overflow: hidden;
 }
 
-#wrapper #editor {
+#wrapper .editor {
     position: absolute; top: 48px; bottom: 0; width: 60%; overflow: auto;
 }
 

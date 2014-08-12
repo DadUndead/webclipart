@@ -53,9 +53,7 @@
 
     <div id="wrapper">
 
-      <div id="editor">
-        <canvas id="canvas" width="2000" height="2000"></canvas>
-      </div>
+      <editor></editor><!-- директива для редактора -->
 
       <div id="gallery" ng-controller="GalleryController">
         <div class="categories">
@@ -95,15 +93,9 @@
     <script src="{% static 'clipart/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
     <script src="{% static 'clipart/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'clipart/bower_components/angular/angular.min.js' %}"></script>
+    <script src="{% static 'clipart/bower_components/fabric/dist/fabric.min.js' %}"></script>
     <script src="{% static 'clipart/js/app.js' %}"></script>
-    <script>
-      $(function(){
-        var onResize = function() {
-          var editor = $('#editor'), canvasSize = 2000;
-          editor.scrollTop((canvasSize - editor.height())/2).scrollLeft((canvasSize - editor.width())/2);
-        };
-        $(window).resize(onResize); onResize();
-      });
-    </script>
+    <script src="{% static 'clipart/js/controllers.js' %}"></script>
+    <script src="{% static 'clipart/js/directives.js' %}"></script>
   </body>
 </html>
