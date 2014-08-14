@@ -5,11 +5,20 @@ html,body{height:100%;width: 100%}
 }
 
 #wrapper .editor {
-    position: absolute; top: 48px; bottom: 0; width: 60%; overflow: auto;
+    position: absolute; top: 48px; bottom: 0; width: 70%; overflow: auto;
+    background-image: url("/static/clipart/img/tissue.jpg");
+}
+
+#wrapper .editor .canvas-wrapper {
+    position: absolute; top: 50%; left: 50%; margin-left: -450px; margin-top: -350px;
+}
+
+#wrapper .editor .canvas-wrapper canvas {
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
 #wrapper #gallery {
-    position: absolute; top: 48px; bottom: 0; right: 0; width: 40%;
+    position: absolute; top: 48px; bottom: 0; right: 0; width: 30%;
     background-color: #f5f5f5; border-left: solid 1px lightgray;
 }
 

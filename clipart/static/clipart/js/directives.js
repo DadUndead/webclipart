@@ -26,23 +26,26 @@ angular.module('clipart.directives', [])
       }
     }
   })
-  .directive('editor', ['$window', function($window) {
+  .directive('editor', function($window) {
     return {
       restrict: 'E',
       templateUrl: '/static/clipart/partials/editor.html',
       replace: true,
       link: function(scope, element, attrs) {
         //Перемещение скрулов при ресайзе окна
-        var canvas = new fabric.Canvas(element.find('canvas')[0]);
+        var canvas = new fabric.Canvas(element.find('canvas')[0], {backgroundColor : "#fff"});
 
-        var onWinResize = function() {
-          //element.scrollTop((1000 - element.height())/2).scrollLeft((2000 - element.width())/2);
-          //TODO - учесть что конвас должен иметь минимальный размер 800 на 800 px
-          canvas.setHeight(element.height());
-          canvas.setWidth(element.width());
-        };
-        onWinResize();
-        angular.element($window).bind('resize', onWinResize);
+        scope.$watch(attrs.canvasWidth, function(width) {
+          width = width || 800
+          canvas.setWidth(width);
+          element.find('.canvas-wrapper').css({'margin-left': -width / 2});
+        });
+
+        scope.$watch(attrs.canvasHeight, function(height) {
+          height = height || 600
+          canvas.setHeight(height);
+          element.find('.canvas-wrapper').css({'margin-top': -height / 2});
+        });
 
         // создаём прямоугольник
         var rect = new fabric.Rect({
@@ -57,4 +60,4 @@ angular.module('clipart.directives', [])
         canvas.add(rect);
       }
     }
-  }]);
+  });
