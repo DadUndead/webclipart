@@ -1,0 +1,29 @@
+<div class="gallery">
+  <div class="categories">
+    <ul>
+      <li ng-repeat="category in categories">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox"
+                   ng-model="category.checked"
+                   ng-change="categoriesChanged(categories)">
+            {{ category.name }}
+          </label>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="images" ng-init="sliderModel=100">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="slider" ng-slider min="50" max="300" ng-model="sliderModel"></div>
+        <p>{{ sliderModel + 'px' }}</p>
+      </div>
+    </div>
+    <ul>
+      <li class="image-wrapper" ng-repeat="image in images" ng-draggable>
+        <img ng-src="{{ image.src }}" ng-style="{width: sliderModel + 'px', height: sliderModel + 'px'}">
+      </li>
+    </ul>
+  </div>
+</div>
