@@ -38,6 +38,14 @@ angular.module('clipart.directives', [])
       templateUrl: '/static/clipart/partials/editor.html',
       replace: true,
       link: function(scope, element, attrs) {
+
+        if (!document.createElement('canvas').getContext) {
+          element.append('<div style="position: absolute; top: 30px; width: 100%; height: 120px; text-align: center;">' +
+                            '<h1>Ваш браузер не поддерживается</h1>' +
+                         '</div>');
+          return;
+        }
+
         //Перемещение скрулов при ресайзе окна
         var canvas = new fabric.Canvas(element.find('canvas')[0], {backgroundColor : "#fff"});
 
@@ -57,11 +65,53 @@ angular.module('clipart.directives', [])
         $rootScope.$on('drop', function(event, position) {
           fabric.Image.fromURL(event.targetScope.image.src, function(img) {
 
-            img.setLeft(position.left - canvas.getWidth()/2);
-            img.setTop(position.top - canvas.getHeight()/2);
+            var offset = fabric.util.getElementOffset(canvas.lowerCanvasEl);
+            img.setLeft(position.left - offset.left);
+            img.setTop(position.top - offset.top);
+            img.borderColor = '#FF0080';
+            img.cornerColor = '#FF0080';
 
             canvas.add(img);
           });
+        });
+
+        function active(cb) {
+          if (canvas.getActiveGroup()) {
+            canvas.getActiveGroup().forEachObject(function(o) { cb(o); });
+          } else if (canvas.getActiveObject()) {
+            cb(canvas.getActiveObject());
+          }
+        }
+
+        //Команды
+        $rootScope.$on('command:front', function() {
+          active(function(o) { canvas.bringToFront(o); });
+        });
+
+        $rootScope.$on('command:back', function() {
+          active(function(o) { canvas.sendToBack(o) });
+        });
+
+        $rootScope.$on('command:clear', function() {
+          canvas.clear().renderAll();
+        });
+
+        $('html').keyup(function(e) {
+          if (e.keyCode == 46) {
+            if (canvas.getActiveGroup()) {
+              canvas.getActiveGroup().forEachObject(function(o) { canvas.remove(o); });
+              canvas.discardActiveGroup().renderAll();
+            } else {
+              canvas.remove(canvas.getActiveObject());
+            }
+          }
+        });
+
+        $rootScope.$on('command:save', function(event, format) {
+          canvas.deactivateAllWithDispatch().renderAll();
+          
+          var dataUrl = canvas.toDataURL(format);
+          $('<a>').attr({ href:dataUrl, download:'webclipart.' + format, target: '_blank' })[0].click();
         });
       }
     }
@@ -103,8 +153,6 @@ angular.module('clipart.directives', [])
             scope.images = [];
           }
         };
-
-        //Таскалка
       }
     }
   }])
@@ -120,6 +168,7 @@ angular.module('clipart.directives', [])
           appendTo: "body",
           revert:'invalid',
           containment: '#wrapper',
+          cursor: 'move',
           zIndex: 100
         });
 
@@ -141,11 +190,14 @@ angular.module('clipart.directives', [])
       restrict: 'A',
       link: function(scope, element, attrs) {
         element.droppable({
-          accept: '.image-wrapper',
           drop: function(event, ui) {
             var dr = ui.draggable;
             dr.trigger('drop', ui.position);
           }
+        });
+
+        scope.$watch(attrs.accept, function(newValue) {
+          element.droppable( "option", "accept", newValue );
         });
 
         scope.$on('$destroy', function() {

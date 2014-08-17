@@ -37,7 +37,7 @@ def get_images(request):
         categories = map(int, param.split(','))
 
     data = [{"src": pic.src.url, "name": pic.name}
-            for pic in Image.objects.filter(categories__in=categories).distinct()]
+            for pic in Image.objects.filter(category__in=categories)]
     return render_json(data)
 
 

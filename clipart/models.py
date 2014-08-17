@@ -17,7 +17,7 @@ class Category(models.Model):
 class Image(models.Model):
     name = models.CharField(max_length=50, verbose_name=u'название')
     src = models.FileField(upload_to='images', verbose_name=u'путь')
-    categories = models.ManyToManyField(Category)
+    category = models.ForeignKey(Category, verbose_name=u'категория')
 
     def __unicode__(self):
         return self.name
