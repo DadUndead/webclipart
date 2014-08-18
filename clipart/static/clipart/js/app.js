@@ -3,5 +3,6 @@
 
 angular.module('clipart', [
   'clipart.controllers',
-  'clipart.directives'
+  'clipart.directives',
+  'clipart.services'
 ]);

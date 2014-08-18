@@ -50,13 +50,13 @@ angular.module('clipart.directives', [])
         var canvas = new fabric.Canvas(element.find('canvas')[0], {backgroundColor : "#fff"});
 
         scope.$watch(attrs.canvasWidth, function(width) {
-          width = width || 800
+          width = width || 800;
           canvas.setWidth(width);
           element.find('.canvas-wrapper').css({'margin-left': -width / 2});
         });
 
         scope.$watch(attrs.canvasHeight, function(height) {
-          height = height || 600
+          height = height || 600;
           canvas.setHeight(height);
           element.find('.canvas-wrapper').css({'margin-top': -height / 2});
         });
@@ -107,11 +107,26 @@ angular.module('clipart.directives', [])
           }
         });
 
+        //инициация события нажатия
+        function fireClick(obj){
+          var fireOnThis = obj;
+          if( document.createEvent ) {
+            var evObj = document.createEvent('MouseEvents');
+            evObj.initEvent( 'click', true, false );
+            fireOnThis.dispatchEvent( evObj );
+
+          } else if( document.createEventObject ) {
+            var evObj = document.createEventObject();
+            fireOnThis.fireEvent( 'onclick', evObj );
+          }
+        }
+
         $rootScope.$on('command:save', function(event, format) {
           canvas.deactivateAllWithDispatch().renderAll();
-          
+
           var dataUrl = canvas.toDataURL(format);
-          $('<a>').attr({ href:dataUrl, download:'webclipart.' + format, target: '_blank' })[0].click();
+          var a = $('<a>').attr({ href:dataUrl, download:'webclipart.' + format })[0];
+          fireClick(a);
         });
       }
     }
@@ -119,14 +134,14 @@ angular.module('clipart.directives', [])
 
   //Директива для галлерей с возможностю перетаскивать изображения
 
-  .directive('gallery', ['$http', '$log', function($http, $log) {
+  .directive('gallery', ['$http', '$log', 'Database', function($http, $log, Database) {
     return {
       restrict: 'E',
       templateUrl: '/static/clipart/partials/gallery.html',
       replace: true,
       link: function(scope, element, attrs) {
         //Загружаем список категорий
-        $http.get('/clipart/categories').success(function(data) {
+        Database.getCategories().success(function(data) {
           scope.categories = data;
         });
 
@@ -141,11 +156,7 @@ angular.module('clipart.directives', [])
           $log.info(selectedCatIds);
           if (selectedCatIds.length) {
             //Грузим список картинок с данными категориями
-            $http({
-              url: '/clipart/images',
-              method: "GET",
-              params: { categories: selectedCatIds.join(',') }
-            }).success(function(data) {
+            Database.getImages(selectedCatIds).success(function(data) {
               $log.info(data);
               scope.images = data;
             });
